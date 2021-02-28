@@ -1,0 +1,44 @@
+
+ private void fetchData() {
+        StringRequest request = new StringRequest(Request.Method.GET, topheadlinesURL+"&pageSize="+per_page,
+                new Response.Listener<String>() {
+                    @Override
+                   public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            JSONArray jsonArray = jsonObject.getJSONArray("articles");
+                            int length = jsonArray.length();
+
+                            for (int i = 0; i < length; i++) {
+
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                                JSONObject s1 = jsonObject1.getJSONObject("source");
+                                String source = s1.getString("name");
+
+
+                                String title = jsonObject1.getString("title");
+
+                                String desp = jsonObject1.getString("description");
+
+                                topHeadlinesModelList.add(new TopHeadlinesModel(title, desp, source));
+                            }
+                            topHeadlinesAdapter.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, "Data Not Found !!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
+
+    }
+FetchCode.txt
+Displaying FetchCode.txt.
